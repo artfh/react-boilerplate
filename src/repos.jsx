@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import request from 'superagent';
+import fetch from 'isomorphic-fetch'
 
 import { Input, ButtonGroup, Form} from './utils/forms';
 import _ from 'lodash';
@@ -14,12 +14,13 @@ export class RepoDetails extends React.Component {
   }
 
   componentDidMount(){
-    request
-      .get(`https://api.github.com/repos/wesbos/${this.props.params.id}`)
-      .end( (err, res)=> {
-        this.setState({data:res.body});
-        //console.log(res.body);
-    });
+
+    fetch(`https://api.github.com/repos/wesbos/${this.props.params.id}`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({data:json});
+        //console.log(json);
+      });
   }
 
   handleSubmit(value) {
@@ -87,16 +88,15 @@ export class ReposList extends React.Component {
   }
 
   componentDidMount(){
-    request
-      .get('https://api.github.com/users/wesbos/repos')
-      .end( (err, res)=> {
-        this.setState({ data: (this.props.limit) ? _.slice(res.body,0,this.props.limit) : res.body })
-
-    });
+    fetch('https://api.github.com/users/wesbos/repos')
+      .then(response => response.json())
+      .then(json => {
+          this.setState({ data: (this.props.limit) ? _.slice(json,0,this.props.limit) : json })
+      });
   }
 
   render() {
-    var nodes = this.state.data.map( e => <RepoListRow key={e.login} data={e}/> );
+    var nodes = this.state.data.map( e => <RepoListRow key={e.name} data={e}/> );
     return (
         <table className="table">
           <thead>

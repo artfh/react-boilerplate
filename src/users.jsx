@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import request from 'superagent';
 import _ from 'lodash';
+import fetch from 'isomorphic-fetch'
 
 import { Input, ButtonGroup, Form} from './utils/forms';
 
@@ -15,12 +15,12 @@ export class UserDetails extends React.Component {
   }
 
   componentDidMount(){
-    request
-      .get(`https://api.github.com/users/${this.props.params.login}`)
-      .end( (err, res)=> {
-        this.setState({data:res.body});
-        console.log(res.body);
-    });
+    fetch(`https://api.github.com/users/${this.props.params.login}`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({data:json});
+        //console.log(json);
+      });
   }
 
   handleSubmit(value) {
@@ -93,12 +93,13 @@ export class UserList extends React.Component {
   }
 
   componentDidMount(){
-    request
-      .get('https://api.github.com/users/wesbos/followers')
-      .end( (err, res)=> {
 
-        this.setState({ data: (this.props.limit) ? _.slice(res.body,0,this.props.limit) : res.body })
-    });
+    fetch('https://api.github.com/users/wesbos/followers')
+      .then(response => response.json())
+      .then(json => {
+          this.setState({ data: (this.props.limit) ? _.slice(json,0,this.props.limit) : json })
+      });
+
   }
 
   render() {
