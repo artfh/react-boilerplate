@@ -9,6 +9,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Router, Route, hashHistory, IndexRoute, browserHistory } from 'react-router'
 import { Link } from 'react-router'
 
+import { createStore, applyMiddleware, compose } from 'redux'
+import { Provider } from 'react-redux'
+
+
 import { NavBar, NavLink } from './utils/navbar';
 import { Tabs, Tab } from './utils/tabs';
 
@@ -16,6 +20,8 @@ import { Home } from './home';
 import { About } from './about';
 import { UserPage, UserDetails} from './users';
 import { ReposPage, RepoDetails} from './repos';
+import { Message} from './message';
+
 
 
 class App extends React.Component {
@@ -26,6 +32,7 @@ class App extends React.Component {
           <NavLink to="/" onlyActiveOnIndex={true}>Home</NavLink>
           <NavLink to="/users">Users</NavLink>
           <NavLink to="/repos">Repos</NavLink>
+          <NavLink to="/msg">Message</NavLink>
           <NavLink to="/about">About</NavLink>
         </NavBar>
         <div className="container">
@@ -36,18 +43,40 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Router history={hashHistory}>
-     <Route path="/" component={App}>
-        <IndexRoute component={Home}/>
-        <Route path="/about" component={About}/>
-        <Route path="/users" component={UserPage}/>
-        <Route path="/users/:login" component={UserDetails}/>
-      <Route path="/repos" component={ReposPage}/>
-    <Route path="/repos/:id" component={RepoDetails}/>
 
-     </Route>
-   </Router>
-,
+class Root extends React.Component {
+  render() {
+    const { store, history } = this.props
+    return (
+      <Provider store={store}>
+        <Router history={history}>
+           <Route path="/" component={App}>
+              <IndexRoute component={Home}/>
+              <Route path="/msg" component={Message}/>
+              <Route path="/about" component={About}/>
+              <Route path="/users" component={UserPage}/>
+              <Route path="/users/:login" component={UserDetails}/>
+            <Route path="/repos" component={ReposPage}/>
+          <Route path="/repos/:id" component={RepoDetails}/>
+           </Route>
+         </Router>
+      </Provider>
+    )
+  }
+}
+
+const rootReducer = (state = { msg:'test'}, action) => {
+  console.log('reduce',state,action);
+  switch (action.type) {
+    case 'SEND_MESSAGE':
+      return {  msg : action.msg }
+  }
+  return state
+};
+
+const store = createStore( rootReducer);
+
+ReactDOM.render(
+  <Root store={store} history={hashHistory} />,
   document.getElementById('app')
 );
