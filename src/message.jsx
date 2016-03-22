@@ -2,18 +2,23 @@ import React from 'react';
 
 import { connect } from 'react-redux'
 
-import { sendMessage } from './actions'
+import { sendMessage, loadUsers } from './actions'
 
 class MessageComponent extends React.Component {
+
+  componentDidMount(){
+    this.props.onMount();
+  }
 
   render() {
     console.log("1",this.props);
     return (
       <div onClick={ e => {
             this.props.onClick();
-            console.log('!!!!!!!!!!');
         } }>
         Message! {this.props.msg}
+        <hr/>
+      {  this.props.data ? this.props.data.map( e => e.login+", " ) : '???' }
       </div>
     );
   }
@@ -21,17 +26,22 @@ class MessageComponent extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log('state ', state);
   return {
-    msg: state.msg
+    msg: state.msg,
+    data: state.users
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(sendMessage('AAAAA'))
+      dispatch(loadUsers())
+    },
+
+    onMount: () => {
+      dispatch(loadUsers())
     }
+
   }
 }
 

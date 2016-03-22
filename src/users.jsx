@@ -6,6 +6,8 @@ import fetch from 'isomorphic-fetch'
 
 import { Input, ButtonGroup, Form} from './utils/forms';
 
+import { connect } from 'react-redux'
+import { loadUsers } from './actions'
 
 export class UserDetails extends React.Component {
 
@@ -68,7 +70,7 @@ UserDetails.contextTypes = {
 
 class UserListRow extends React.Component {
   render() {
-    console.log(this.props.data);
+    //console.log(this.props.data);
     return (
       <tr>
       <td>
@@ -85,25 +87,13 @@ class UserListRow extends React.Component {
 
 export class UserList extends React.Component {
 
-  constructor(props) {
-   super(props);
-   this.state = {
-     data:[]
-   }
-  }
-
   componentDidMount(){
-
-    fetch('https://api.github.com/users/wesbos/followers')
-      .then(response => response.json())
-      .then(json => {
-          this.setState({ data: (this.props.limit) ? _.slice(json,0,this.props.limit) : json })
-      });
-
+    this.props.onMount()
   }
 
   render() {
-    var nodes = this.state.data.map( e => <UserListRow key={e.login} data={e}/> );
+    var nodes = this.props.limit ? _.slice(this.props.data,0,this.props.limit) : this.props.data
+    nodes = nodes.map( e => <UserListRow key={e.login} data={e}/> );
     return (
         <table className="table">
           <thead>
@@ -118,11 +108,20 @@ export class UserList extends React.Component {
 
 }
 
-export class UserPage extends React.Component {
-  render() {
+
+UserList = connect(
+  (state, ownProps) => ({data: state.users}),
+  (dispatch, ownProps) => ({
+      onMount: () => dispatch(loadUsers())
+  })
+)(UserList)
+
+export { UserList }
+
+
+export const UserPage = (props) =>  {
     return <div>
-    <h2 className="page-header">Users</h2>
+    <h2 className="page-header">Users with Redux</h2>
     <UserList/>
     </div>;
-  }
 }

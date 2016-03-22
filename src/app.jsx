@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Router, Route, hashHistory, IndexRoute, browserHistory } from 'react-router'
 import { Link } from 'react-router'
 
-import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 
 
@@ -21,6 +20,8 @@ import { About } from './about';
 import { UserPage, UserDetails} from './users';
 import { ReposPage, RepoDetails} from './repos';
 import { Message} from './message';
+
+import {store } from './store';
 
 
 
@@ -65,16 +66,7 @@ class Root extends React.Component {
   }
 }
 
-const rootReducer = (state = { msg:'test'}, action) => {
-  console.log('reduce',state,action);
-  switch (action.type) {
-    case 'SEND_MESSAGE':
-      return {  msg : action.msg }
-  }
-  return state
-};
 
-const store = createStore( rootReducer);
 
 ReactDOM.render(
   <Root store={store} history={hashHistory} />,
