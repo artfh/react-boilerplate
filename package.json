@@ -42,9 +42,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node server/server.js",
     "build": "babel src -d public/scripts",
-    "dev": "webpack-dev-server --hot --inline"
+    "dev": "webpack-dev-server --hot --inline",
+    "start-es6": "babel-node server/server_es6.js"
+
   },
   "repository": {
     "type": "git",
