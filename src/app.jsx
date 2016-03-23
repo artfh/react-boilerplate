@@ -21,6 +21,8 @@ import { UserPage, UserDetails} from './users';
 import { ReposPage, RepoDetails} from './repos';
 import { Message} from './message';
 
+import { TheatersPage } from './components/theaters'
+
 import {store } from './store';
 
 
@@ -29,12 +31,10 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NavBar brand="react-boilerplate">
-          <NavLink to="/" onlyActiveOnIndex={true}>Home</NavLink>
+        <NavBar brand="Theater App Management">
+          <NavLink to="/" onlyActiveOnIndex={true}>Theaters</NavLink>
           <NavLink to="/users">Users</NavLink>
           <NavLink to="/repos">Repos</NavLink>
-          <NavLink to="/msg">Message</NavLink>
-          <NavLink to="/about">About</NavLink>
         </NavBar>
         <div className="container">
           {this.props.children}
@@ -52,7 +52,7 @@ class Root extends React.Component {
       <Provider store={store}>
         <Router history={history}>
            <Route path="/" component={App}>
-              <IndexRoute component={Home}/>
+              <IndexRoute component={TheatersPage}/>
               <Route path="/msg" component={Message}/>
               <Route path="/about" component={About}/>
               <Route path="/users" component={UserPage}/>
