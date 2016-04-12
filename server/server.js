@@ -19,7 +19,7 @@ server.listen(8080, "localhost", function() {
   console.info("==> 🌎 WebpackDevServer listening on port %s. Open up http://localhost:%s/ in your browser.", 8080, 8080);
 });
 
-
+/*
 var express = require('express');
 var app = express();
 
@@ -31,3 +31,4 @@ app.get('/api/test', function (req, res) {
 app.listen(8081, function () {
   console.log('==> 🌎 Backend app listening on port 8081!');
 });
+*/
