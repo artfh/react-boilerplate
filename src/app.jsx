@@ -68,6 +68,10 @@ class Root extends React.Component {
 
 
 import { Navbar,Nav,NavItem,NavDropdown,MenuItem } from 'react-bootstrap';
+import  Editor from 'react-avatar-editor'
+var imgPath = require('./p11.png');
+
+console.log(imgPath);
 
 const Titlebar = ()=> (
   <Navbar>
@@ -95,11 +99,20 @@ const Titlebar = ()=> (
 class Preview extends React.Component {
   render() {
     const {file, imageUrl} = this.props.file
-    console.log('file',file)
+
+    var img = new Image()
+    img.src = imageUrl
+
+    console.log('file',file, img.width)
     return (
       <div>
-        {file.name}, type: {file.type}<br/>
-        <img ref="img" src={imageUrl} />
+        {file.name}, type: {file.type}, size: {img.width} x {img.height}<br/>
+        <hr/>
+          <ImageEditor image={imageUrl} width={400} height={200}/>
+
+
+
+
       </div>
     )
   }
@@ -107,6 +120,48 @@ class Preview extends React.Component {
 }
 
 
+class ImageEditor extends React.Component {
+
+  constructor(props) {
+   super(props);
+   this.state = {
+     scale:1.0,
+     img: new Image()
+   }
+  }
+
+  handleScale() {
+      var scale = parseFloat(this.refs.scale.value)
+      this.setState({scale: scale})
+  }
+
+  componentDidMount() {
+    var img = new Image()
+    img.onload = (ii)=>this.setState({img})
+    img.src = this.props.image
+  }
+
+  render() {
+    console.log("render");
+    var {img} = this.state
+
+    return (
+      <div>
+          size: {img.width} x {img.height}, scale: {this.state.scale}<br/>
+  <Editor
+      ref="avatar"
+      scale={this.state.scale}
+      borderRadius={0}
+      border={5}
+      image={this.props.image}
+      width={this.props.width}
+      height={this.props.height}/>
+      <br />
+      Zoom: <input name="scale" type="range" ref="scale" onChange={this.handleScale.bind(this)} min="1" max="4" step="0.1" defaultValue="1" />
+      </div>
+    )
+  }
+}
 
 
 class Dropzone extends React.Component {
@@ -152,7 +207,9 @@ class Dropzone extends React.Component {
              {this.props.children}
 <hr/>
 {preview}
+<hr/>
 
+<ImageEditor image={imgPath} width={300} height={400}/>
       </div>
     )
   }
@@ -163,7 +220,7 @@ const TestApp = ()=> (
   <div>
     <Titlebar/>
     <div className="container">
-      <h1>file</h1>
+      <h1>File</h1>
       <Dropzone onDrop={  (f)=> console.log(f)    }/>
 
 
