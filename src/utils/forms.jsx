@@ -1,16 +1,38 @@
 import React from 'react';
 var _ = require('lodash');
 
-export var createLink = (that,name)=> {
 
+export const createFormData = (value, files)=> {
+  var formData = new FormData()
+  formData.append("json", JSON.stringify( value ))
+  _.each(_.keys(files), prop=> {
+    _.each(files[prop], f=>formData.append(prop, f))
+  })
+}
+
+
+export var createLink = (that,prop, key)=> {
+  var name = key+'.'+prop
   var valueLink={
     value: _.get(that.state, name),       //that.state[name],
-    requestChange: (v)=>{
+    requestChange: (v, newfiles)=>{
+      console.log('requestChange',name,v, newfiles);
       var state = that.state;
       _.set(state, name, v);
+
+      if(newfiles) {
+        var { files } = state
+        if (!files) {
+          files = { }
+        }
+        files[prop]=newfiles
+        state.files=files
+      }
+
       //state[name] = v;
       that.setState(state);
-      //console.log('requestChange',state);
+      console.log('state: ', state);
+
    }
   };
   return valueLink;
@@ -57,6 +79,8 @@ export class Input extends React.Component {
 }
 
 
+
+
 export class FormGroup extends React.Component {
 
   render() {
@@ -90,7 +114,7 @@ export class Form extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     //console.log('Form.handleSubmit',this.state);
-    this.props.onSubmit(this.state.value)
+    this.props.onSubmit(this.state.value, this.state.files)
   }
 
   componentWillReceiveProps(props) {
@@ -103,7 +127,7 @@ export class Form extends React.Component {
     var chs = React.Children.map(this.props.children, child=>{
         if (child.props.name) {
             return React.cloneElement(child, {
-              valueLink: createLink(this,'value.'+child.props.name)
+              valueLink: createLink(this, child.props.name,  'value')
       			});
         }
         return child;
@@ -111,7 +135,7 @@ export class Form extends React.Component {
 
 
     return (
-      <form className="form-horizontal"
+      <form className="form-horizontal" encType="multipart/form-data"
           onSubmit={this.handleSubmit.bind(this)}
           >
             {chs}

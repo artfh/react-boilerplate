@@ -8,10 +8,12 @@
     "bootstrap": "^3.3.6",
     "express": "^4.4.5",
     "express-restify-mongoose": "^3.1.1",
+    "formidable": "^1.0.17",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.6.1",
     "method-override": "^2.3.5",
     "mongoose": "^4.4.7",
+    "multiparty": "^4.1.2",
     "react": "^0.14.7",
     "react-avatar-editor": "^3.2.1",
     "react-bootstrap": "^0.28.5",
@@ -19,7 +21,9 @@
     "react-redux": "^4.4.1",
     "react-router": "^2.0.1",
     "redux": "^3.3.1",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "^2.0.1",
+    "superagent": "^1.8.3",
+    "util": "^0.10.3"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
