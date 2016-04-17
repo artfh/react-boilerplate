@@ -84,11 +84,8 @@ class Dropzone extends React.Component {
 
 export class FileInput extends React.Component {
 
-
   onChange(e) {
-    e.preventDefault();
-    console.log(e.target.files);
-    //_.each(e.target.files, this._createPreview.bind(this));
+    e.preventDefault()
     this.props.valueLink.requestChange(null,  e.target.files)
     this.setState({files:e.target.files})
   }
@@ -105,37 +102,93 @@ export class FileInput extends React.Component {
       ch=_.map(this.state.files, f => <span style={{backgroundColor:'#eeeeee', padding:5}}>{f.name}</span>)
     }
 
-
-
     return (
       <FormGroup label={label}>
-
         <span>
         <span className="btn btn-default btn-file">
          Select File
-
         <input
           type="file"
           className="form-control11"
           placeholder={placeholder}
           id={id}
           onChange={this.onChange.bind(this)}
-
           />
 
         </span>
-
         {' '}{ch}
 
-
-
       </span>
-
       </FormGroup>
     );
   }
+}
 
 
+
+export class ImageInput extends React.Component {
+
+
+  _createPreview(file) {
+    var self = this , newFile, reader = new FileReader();
+    reader.onloadend = (e) => {
+      newFile = {file:file, imageUrl:e.target.result};
+      this.setState({files:[file], imageFile:file, imageUrl: e.target.result})
+    };
+    reader.readAsDataURL(file);
+  }
+
+
+  onChange(e) {
+    e.preventDefault()
+    this.props.valueLink.requestChange(null,  e.target.files)
+
+    if(e.target.files.length>0) {
+      this._createPreview(e.target.files[0])
+    }
+
+  }
+
+  render() {
+
+    var {name,label,placeholder,id} = this.props
+    label = label || _.startCase(name);
+    placeholder = placeholder || _.startCase(name);
+    id = id || 'id_'+name;
+
+
+
+    var preview = ''
+    if (this.state && this.state.imageUrl) {
+      var style = {}
+      if (this.props.thumbWidth) style.maxWidth=this.props.thumbWidth
+      if (this.props.thumbHeight) style.maxHeight=this.props.thumbHeight
+
+      preview= <img src={this.state.imageUrl} style={style} />
+    }
+
+    return (
+      <FormGroup label={label}>
+        <span>
+        <span className="btn btn-default btn-file">
+         Select Image
+        <input
+          type="file"
+          className="form-control11"
+          placeholder={placeholder}
+          id={id}
+          onChange={this.onChange.bind(this)}
+          />
+
+        </span>
+        {' '}
+
+        {preview}
+
+      </span>
+      </FormGroup>
+    );
+  }
 }
 
  export class TestForm extends React.Component {
@@ -220,7 +273,8 @@ request
             >
               <Input name="name"/>
 
-                <FileInput name="file" type="file"/>
+                <FileInput name="file"/>
+                <ImageInput name="image" thumbWidth={200} thumbHeight={100} />
 
 
               <ButtonGroup>
