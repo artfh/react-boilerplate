@@ -3,11 +3,15 @@ var _ = require('lodash');
 
 
 export const createFormData = (value, files)=> {
-  var formData = new FormData()
-  formData.append("json", JSON.stringify( value ))
+  var formData = new FormData();
+  formData.append("json", JSON.stringify( value ));
   _.each(_.keys(files), prop=> {
-    _.each(files[prop], f=>formData.append(prop, f))
+      var p = prop;
+      _.each(files[prop], f=> {
+        formData.append(p, f);
+      })
   })
+  return formData
 }
 
 
@@ -20,16 +24,13 @@ export var createLink = (that,prop, key)=> {
       var state = that.state;
       _.set(state, name, v);
 
-      if(newfiles) {
-        var { files } = state
-        if (!files) {
-          files = { }
-        }
-        files[prop]=newfiles
-        state.files=files
+      var { files } = state
+      if (!files) {
+        files = { }
       }
+      files[prop]=newfiles || null
+      state.files=files
 
-      //state[name] = v;
       that.setState(state);
       console.log('state: ', state);
 
