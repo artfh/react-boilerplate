@@ -6,6 +6,8 @@ import { Input, ButtonGroup, Form, FormGroup, createFormData} from './utils/form
 import { FileInput, File } from './forms/file'
 import { ImageInput, Image } from './forms/image'
 
+import { Modal ,Button} from 'react-bootstrap';
+
 
 export class UserForm extends React.Component {
 
@@ -24,9 +26,15 @@ export class UserForm extends React.Component {
         <Input name="name"/>
 
         <ImageInput
-          name="photo"
+          name="avatar"
           thumbWidth={200}
-          thumbHeight={200} />
+          thumbHeight={100} fixedSize={ {w:200,h:200} }/>
+
+
+          <ImageInput
+            name="photo"
+            thumbWidth={200}
+            thumbHeight={400} />
 
           <FileInput name="attachment"/>
 

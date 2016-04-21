@@ -2,7 +2,9 @@ import React from 'react';
 
 import {  FormGroup} from '../utils/forms';
 
+import { Modal ,Button} from 'react-bootstrap';
 
+import {ImageEditor} from './image_editor'
 
 export class Image extends React.Component {
 
@@ -24,37 +26,103 @@ export class ImageInput extends React.Component {
 
   constructor(props) {
     super(props);
+
+    var state = {showCropModal:false}
+
     if (this.props.valueLink.value) {
       var imageUrl  = '/api/files/'+this.props.valueLink.value.$oid || null
-      this.state = { imageUrl }
+      state.imageUrl =  imageUrl
     }
+
+    this.state =  state
+    console.log("fixedSize", this.props.fixedSize);
   }
 
 
-  _createPreview(file) {
-    var self = this , newFile, reader = new FileReader();
+  __createPreview(file, callback) {
+    var reader = new FileReader();
     reader.onloadend = (e) => {
-      this.setState({files:[file], imageFile:file, imageUrl: e.target.result})
+      const imageURL = e.target.result
+      callback(file, imageURL)
     };
     reader.readAsDataURL(file);
   }
 
   onChange(e) {
     e.preventDefault()
-    this.props.valueLink.requestChange(null,  e.target.files)
 
     if(e.target.files.length>0) {
-      this._createPreview(e.target.files[0])
-    }
+      const file = e.target.files[0]
+
+      if (this.props.fixedSize) {
+        this.__createPreview(file, (file, imageURL)=> {
+          this.setState({ showCropModal:true, originalFile: { file, imageURL }})
+        })
+      } else {
+        this.__createPreview(file, (file, imageURL)=> {
+          this.props.valueLink.requestChange(null,  [file])
+          this.setState({ imageFile:file, imageUrl: imageURL})
+        })
+      }
+
+
+    } else this._resetFile()
+
+  }
+
+  _resetFile() {
+    this.props.valueLink.requestChange(null,  null)
+    this.setState({ imageFile:null, imageUrl: null })
   }
 
   clearFile(e) {
     e.preventDefault()
-    console.log("clearFile");
-    this.props.valueLink.requestChange(null,  e.target.files)
-
-    this.setState({files:null, imageFile:null, imageUrl: null})
+    this._resetFile()
   }
+
+
+  closeModal() {
+    this.setState({showCropModal:false})
+  }
+
+  onEditFinish(file, imageURL) {
+    console.log('onEditFinish',file);
+    this.props.valueLink.requestChange(null,  [file])
+    this.setState({ imageFile:file, imageUrl: imageURL,showCropModal:false})
+  }
+
+  renderCropModal() {
+
+    if(!this.state.showCropModal) return null
+
+    return (
+      <Modal
+        show={this.state.showCropModal}
+        dialogClassName="image-editor" bsSize="large"
+        onHide={()=> this.setState({showCropModal:false}) }>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Scale and Crop
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ImageEditor
+            ref="editor"
+            onFinish={this.onEditFinish.bind(this)}
+            image={this.state.originalFile.imageURL}
+            width={this.props.fixedSize.w}
+            height={this.props.fixedSize.h}/>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={()=> this.refs.editor.finishEditing() }>Apply</Button>
+          <Button onClick={()=> this.setState({showCropModal:false}) }>Cancel</Button>
+
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
 
   render() {
 
@@ -68,7 +136,7 @@ export class ImageInput extends React.Component {
     const hasValue = this.props.valueLink.value || (this.state && this.state.imageUrl) ? true : false
 
     if (this.state && this.state.imageUrl) {
-      var style = {}
+      var style = { border:'1px solid #cccccc', marginRight:10 }
       if (this.props.thumbWidth) style.maxWidth=this.props.thumbWidth
       if (this.props.thumbHeight) style.maxHeight=this.props.thumbHeight
 
@@ -82,27 +150,35 @@ export class ImageInput extends React.Component {
           {preview}
 
           {!hasValue ?
-          <span className="btn btn-default btn-file">
-            Select Image
-            <input
-              type="file"
-              className="form-control11"
-              placeholder={placeholder}
-              id={id}
-              onChange={this.onChange.bind(this)}
-              />
-          </span>
-        : null }
+            <span className="btn btn-default btn-file">
+              Select Image
+              <input
+                type="file"
+                className="form-control11"
+                placeholder={placeholder}
+                id={id}
+                onChange={this.onChange.bind(this)}
+                />
+            </span>
+            : null }
 
-        {hasValue ?
-          <button className="btn btn-default"
-             onClick={this.clearFile.bind(this)} >
-            <span className="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-        : null }
+            {hasValue ?
+              <button
+                className="btn btn-default"
+                onClick={this.clearFile.bind(this)} >
+                <span
+                  className="glyphicon glyphicon-trash"
+                  aria-hidden="true">
+                </span>
+              </button>
+              : null }
 
 
-        </span>
-      </FormGroup>
-    );
-  }
-}
+              { this.renderCropModal() }
+
+
+            </span>
+          </FormGroup>
+        );
+      }
+    }
