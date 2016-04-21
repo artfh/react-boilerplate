@@ -123,6 +123,45 @@ export class ImageInput extends React.Component {
     )
   }
 
+  renderInputButton(id) {
+    return (
+    <span className="btn btn-default btn-file">
+      Select Image
+      <input
+        type="file"
+        className="form-control11"
+        id={id}
+        onChange={this.onChange.bind(this)}
+        />
+      </span>
+    )
+  }
+
+  renderInputArea(id) {
+    return (
+
+<div style={{ border:'1px dashed #aaaaaa', cursor:'pointer'}} onClick={ ()=> this.refs.fileInput.click() }>
+
+<div
+
+  style={{margin:40, textAlign:'center',
+  verticalAlign:'middle', color:'#aaaaaa', fontWeight:'bold'}}>
+
+  Click to upload image</div>
+
+
+    <input
+      style={{display:'none'}}
+      ref="fileInput"
+      type="file"
+      id={id}
+      onChange={this.onChange.bind(this)}
+      />
+
+    </div>
+
+    )
+  }
 
   render() {
 
@@ -150,16 +189,7 @@ export class ImageInput extends React.Component {
           {preview}
 
           {!hasValue ?
-            <span className="btn btn-default btn-file">
-              Select Image
-              <input
-                type="file"
-                className="form-control11"
-                placeholder={placeholder}
-                id={id}
-                onChange={this.onChange.bind(this)}
-                />
-            </span>
+            this.renderInputArea(id)
             : null }
 
             {hasValue ?
