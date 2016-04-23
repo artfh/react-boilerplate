@@ -5,6 +5,8 @@ import request from 'superagent'
 import { Input, ButtonGroup, Form, FormGroup, createFormData} from './utils/forms';
 import { FileInput, File } from './forms/file'
 import { ImageInput, Image } from './forms/image'
+import { RichText } from './forms/rich'
+
 
 import { Modal ,Button} from 'react-bootstrap';
 
@@ -30,6 +32,7 @@ export class UserForm extends React.Component {
           thumbWidth={200}
           thumbHeight={100} fixedSize={ {w:200,h:200} }/>
 
+        <RichText name="info" />
 
           <ImageInput
             name="photo"
@@ -63,11 +66,17 @@ class UserPreview extends React.Component {
           <small>User:</small> {user.name}
         </h4>
 
+<Image
+          imageId={user.avatar}
+           />
+
         <Image
           imageId={user.photo}
           style={{maxWidth:300, maxHeight:300 }} />
 
-        <br/>
+        
+        <div dangerouslySetInnerHTML={{__html: user.info}}></div>
+        
         Attachment: <File fileId={user.attachment}/>
       </div>
     )

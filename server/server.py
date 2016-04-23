@@ -14,7 +14,9 @@ app = Flask(__name__)
 
 class User(Document):
     name = StringField()
+    info = StringField()
     photo = FileField()
+    avatar = FileField()
     attachment = FileField()
 
 
@@ -32,14 +34,23 @@ def user(user_id):
     else:
         json = loads(request.form['json'])
         user = User.objects.get(id=user_id)
-        user.name = json['name']
 
+        setField(user, 'name', json)
+        setField(user, 'info', json)
+
+        setFile(user, 'avatar', json, request.files)
         setFile(user, 'photo', json, request.files)
         setFile(user, 'attachment', json, request.files)
 
         user.save()
         return Response(response=user.to_json(), status=200,
                         mimetype="application/json")
+
+
+def setField(obj, prop, json):
+    v = json.get(prop)
+    if v:
+        obj[prop] = v
 
 
 def setFile(obj, prop, json, files):
