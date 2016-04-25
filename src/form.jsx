@@ -2,7 +2,7 @@ import React from 'react';
 import request from 'superagent'
 
 
-import { Input, ButtonGroup, Form, FormGroup, createFormData} from './utils/forms';
+import { Input, ButtonGroup, Form, FormGroup, createFormData} from './forms/forms';
 import { FileInput, File } from './forms/file'
 import { ImageInput, Image } from './forms/image'
 import { RichText } from './forms/rich'
@@ -74,9 +74,9 @@ class UserPreview extends React.Component {
           imageId={user.photo}
           style={{maxWidth:300, maxHeight:300 }} />
 
-        
+
         <div dangerouslySetInnerHTML={{__html: user.info}}></div>
-        
+
         Attachment: <File fileId={user.attachment}/>
       </div>
     )
@@ -117,7 +117,7 @@ export class UserContainer extends React.Component {
     if (!this.state.loaded) return <p>loading...</p>
     return (
       <div>
-        <h1 className="page-header">User</h1>
+        <h1 className="page-header">Rich Form</h1>
         <div className="row">
           <div className="col-sm-6">
             <UserForm
@@ -137,7 +137,7 @@ export class UserContainer extends React.Component {
 }
 
 
-export class DropTest extends React.Component {
+export class FormPage extends React.Component {
 
   render() {
     return (

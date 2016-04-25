@@ -1,7 +1,7 @@
 import React from 'react';
 import request from 'superagent'
 
-import { FormGroup } from '../utils/forms';
+import { FormGroup } from './forms';
 
 
 

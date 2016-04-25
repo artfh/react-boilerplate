@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import _ from 'lodash';
 import fetch from 'isomorphic-fetch'
 
-import { Input, ButtonGroup, Form} from './utils/forms';
+import { Input, ButtonGroup, Form} from './forms/forms';
 
 import { connect } from 'react-redux'
 import { loadUsers } from './actions'

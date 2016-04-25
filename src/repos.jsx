@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import fetch from 'isomorphic-fetch'
 
-import { Input, ButtonGroup, Form} from './utils/forms';
+import { Input, ButtonGroup, Form} from './forms/forms';
 import _ from 'lodash';
 
 export class RepoDetails extends React.Component {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {  FormGroup} from '../utils/forms';
+import {  FormGroup} from './forms';
 
 import { Modal ,Button} from 'react-bootstrap';
 

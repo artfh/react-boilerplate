@@ -1,5 +1,5 @@
 import React from 'react';
-import {  FormGroup} from '../utils/forms'
+import {  FormGroup} from './forms'
 
 import RichTextEditor from 'react-rte'
 
