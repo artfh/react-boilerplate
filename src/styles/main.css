@@ -18,6 +18,14 @@
     display: block;
 }
 
-.DraftEditor-root, .DraftEditor-editorContainer, .public-DraftEditor-content {
-   height: 200px;
+.rich-editor-xlg {
+   height: 800px;
+}
+
+.rich-editor-lg {
+   height: 600px;
+}
+
+.rich-editor {
+   height: 400px;
 }

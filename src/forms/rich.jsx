@@ -9,7 +9,7 @@ export class RichText extends React.Component {
      super(props);
      console.log('RichText()',props.valueLink.value);
 
-     var value = props.valueLink.value ? 
+     var value = props.valueLink.value ?
         RichTextEditor.createValueFromString(props.valueLink.value,'html'):
         RichTextEditor.createEmptyValue()
 
@@ -53,11 +53,11 @@ export class RichText extends React.Component {
     return (
 
       <FormGroup label={label}>
-        <div >
+        <div  >
         <RichTextEditor
           value={this.state.value}
           onChange={this.onChange.bind(this)}
-          className="form-control11"
+          className="rich-editor"
           placeholder={placeholder}
           id={id}
 
