@@ -63,9 +63,11 @@ const Titlebar = ()=> (
   <Navbar>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">React-Bootstrap1</a>
+        <a href="#">React-Bootstrap</a>
       </Navbar.Brand>
+      <Navbar.Toggle />
     </Navbar.Header>
+    <Navbar.Collapse>
     <Nav>
       <NavItem eventKey={1} href="#">Link</NavItem>
       <NavItem eventKey={2} href="#">Link</NavItem>
@@ -77,6 +79,7 @@ const Titlebar = ()=> (
         <MenuItem eventKey={3.3}>Separated link</MenuItem>
       </NavDropdown>
     </Nav>
+  </Navbar.Collapse>
   </Navbar>
 )
 

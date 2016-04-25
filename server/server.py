@@ -20,7 +20,6 @@ class User(Document):
     attachment = FileField()
 
 
-
 @app.route("/")
 def index():
     return User.objects.to_json()
@@ -47,42 +46,6 @@ def user(user_id):
                         mimetype="application/json")
 
 
-def setField(obj, prop, json):
-    v = json.get(prop)
-    if v:
-        obj[prop] = v
-
-
-def setFile(obj, prop, json, files):
-    photo_id = json.get(prop)
-    if photo_id:
-        obj[prop].grid_id = photo_id
-    else:
-        obj[prop].delete()
-
-    if prop in files:
-        f = files[prop]
-        obj[prop].replace(f, content_type=f.content_type, filename=f.filename)
-
-
-@app.route("/api/post_form", methods=['POST'])
-def post_form():
-    print '---------'
-    print request
-    print loads(request.form['json'])
-    print request.files
-    f = request.files
-
-    json = loads(request.form['json'])
-
-    user = User.objects.get(id='57149070ba4d126035c4e8f3')
-    user.name = json['name']
-    user.photo.replace(request.files['image'], content_type='image/jpeg')
-    print user.save()
-
-    return "ok"
-
-
 @app.route('/api/files/<oid>')
 def get_file(oid):
     meta = request.args.get('meta', False)
@@ -101,6 +64,24 @@ def get_file(oid):
         return response
     except NoFile:
         abort(404)
+
+
+def setField(obj, prop, json):
+    v = json.get(prop)
+    if v:
+        obj[prop] = v
+
+
+def setFile(obj, prop, json, files):
+    photo_id = json.get(prop)
+    if photo_id:
+        obj[prop].grid_id = photo_id
+    else:
+        obj[prop].delete()
+
+    if prop in files:
+        f = files[prop]
+        obj[prop].replace(f, content_type=f.content_type, filename=f.filename)
 
 
 if __name__ == "__main__":
