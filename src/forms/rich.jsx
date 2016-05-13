@@ -57,7 +57,7 @@ export class RichText extends React.Component {
         <RichTextEditor
           value={this.state.value}
           onChange={this.onChange.bind(this)}
-          className="rich-editor"
+          className={this.props.rtClassName}
           placeholder={placeholder}
           id={id}
 

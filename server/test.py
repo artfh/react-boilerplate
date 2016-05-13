@@ -5,29 +5,32 @@ from bson import ObjectId
 
 
 
-class User(Document):
-    name = StringField(required=True)
-    photo = FileField()
+class Theater(Document):
+    name = StringField()
+    email = StringField()
+    homepage = StringField()
+    phone = StringField()
+    address = StringField()
+    open_hours = StringField()
+
+
+class Show(Document):
+    theater = ReferenceField(Theater)
+    title = StringField()
+    subtitle = StringField()
+    teaser = StringField()
+    stuff = StringField()
+    landscape_image = FileField()
+    portrait_image = FileField()
 
 
 if __name__ == '__main__':
-
     connect('localhost')
 
-    #user = User(name='test@example.com')
-    #print user.save()
+    print Theater.objects.get(id='572e7b91ba4d1248d08bc190')
 
-    #data = { 'name': 'test123' }
-    #print User.objects(id='5710caa748351010a32cd348').update(**data)
-
-    user = User.objects.get(id='57149070ba4d126035c4e8f3')
-    user.name = 'aaaaa1'
-    user.photo.grid_id = ObjectId('57149070ba4d126035c4e8f3')
-    user.save()
-
-    print
-
-    for u in User.objects:
-        print u.name, u.id, u.photo.grid_id
-        print u.photo.__dict__
-        print
+    show = Show(title='aaaa')
+    #show.theater_id = ObjectId('572e7b91ba4d1248d08bc190')
+    show.theater=Theater(id='572e7b91ba4d1248d08bc190')
+    show.save()
+    print show.to_json()

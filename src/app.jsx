@@ -22,6 +22,10 @@ import { UserPage, UserDetails } from './users'
 import { ReposPage, RepoDetails } from './repos'
 import { FormPage } from './form'
 
+import {Theaters, Theater, CreateTheater, CreateShow, EditShow, Show} from './theaters'
+
+import './theaters/actions2'
+
 
 class App extends React.Component {
   render() {
@@ -40,7 +44,21 @@ class App extends React.Component {
 
 var routes =
 <Route path="/" component={App}>
-  <IndexRoute component={Home}/>
+   <IndexRoute component={Home}/>
+
+    <Route path="/theaters">
+      <IndexRoute component={Theaters}/>
+      <Route path="v/:theaterId">
+        <IndexRoute component={Theater}/>
+        <Route path="shows/n" component={CreateShow}/>
+        <Route path="shows/e/:showId" component={EditShow}/>
+        <Route path="shows/v/:showId" component={Show}/>
+
+      </Route>
+      <Route path="n" component={CreateTheater}/>
+    </Route>
+
+
   <Route path="/users">
     <IndexRoute component={UserPage}/>
     <Route path="/users/:login" component={UserDetails}/>
@@ -83,6 +101,9 @@ const Titlebar = ()=> (
         <IndexLinkContainer to='/'>
           <NavItem eventKey={1}>Home</NavItem>
         </IndexLinkContainer>
+        <LinkContainer to='/theaters'>
+          <NavItem eventKey={11}>Theaters</NavItem>
+        </LinkContainer>
         <LinkContainer to='/users'>
           <NavItem eventKey={2}>Users</NavItem>
         </LinkContainer>

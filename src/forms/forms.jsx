@@ -1,6 +1,19 @@
 import React from 'react';
 var _ = require('lodash');
 
+import moment from 'moment'
+
+
+export class DateString extends React.Component {
+
+  render() {
+    var { format, value } = this.props
+    //v = moment(value['$date']).format('YYYY-MM-DD')
+    return <div>aaaa</div>
+  }
+
+}
+
 
 export const createFormData = (value, files)=> {
   var formData = new FormData();
@@ -15,10 +28,16 @@ export const createFormData = (value, files)=> {
 }
 
 
-export var createLink = (that,prop, key)=> {
+export var createLink = (that,prop, key, type)=> {
   var name = key+'.'+prop
+  var v = _.get(that.state, name)
+  console.log("VVVV",v);
+  if(v && type === 'date' && v['$date']) {
+      v = moment(v['$date']).format('YYYY-MM-DD')
+  }
+
   var valueLink={
-    value: _.get(that.state, name),       //that.state[name],
+    value: v,       //that.state[name],
     requestChange: (v, newfiles)=>{
       console.log('requestChange',name,v, newfiles);
       var state = that.state;
@@ -79,6 +98,32 @@ export class Input extends React.Component {
 
 }
 
+export class TextInput extends React.Component {
+
+  render() {
+
+    var {name,label,placeholder,id} = this.props
+    label = label || _.startCase(name);
+    placeholder = placeholder || _.startCase(name);
+    id = id || 'id_'+name;
+
+
+    return (
+      <FormGroup label={label}>
+      <textarea
+        type="text"
+        className="form-control"
+        placeholder={placeholder}
+        id={id}
+        {...this.props}
+
+        />
+      </FormGroup>
+    );
+  }
+
+
+}
 
 
 
@@ -128,7 +173,7 @@ export class Form extends React.Component {
     var chs = React.Children.map(this.props.children, child=>{
         if (child.props.name) {
             return React.cloneElement(child, {
-              valueLink: createLink(this, child.props.name,  'value')
+              valueLink: createLink(this, child.props.name,  'value', child.props.type)
       			});
         }
         return child;
