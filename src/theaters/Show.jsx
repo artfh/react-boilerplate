@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 
 import moment from 'moment'
 import later from 'later'
+import _ from 'lodash'
 
 
 import {  Image } from '../forms/image'
 
 import { fetchTheater } from './actions2'
+
+//moment.locale('de');
+later.date.localTime()
 
 @connect(
   (state, ownProps)=> {
@@ -30,7 +34,11 @@ export default class Show extends React.Component {
 
     var a = later.schedule(s).next(10);
     //console.log('--------',a);
-    //a.forEach( m => console.log(m))
+    a.forEach( m => console.log(m))
+
+
+    console.log('-______',new Date());
+
     this.props.fetchTheater(this.props.params.theaterId)
   }
 
@@ -39,10 +47,32 @@ export default class Show extends React.Component {
     const {theater, show} = this.props
 
 
+
     if (!theater || !show ) return null
 
+    var showtimes = []
+    if(show.crons && show.start_date && show.end_date){
 
-    console.log(show.crons);
+      const start_date=moment(show.start_date['$date']).toDate()
+      const end_date=moment(show.end_date['$date']).toDate()
+
+
+      console.log(start_date,end_date)
+      showtimes =_.split(show.crons,'\n').filter(e=>e!="")
+        .map( e=>later.parse.cron(e)).map( e=> later.schedule(e).next(1000, start_date,end_date))
+
+console.log("-", showtimes);
+
+
+      showtimes = _.flatten(showtimes).sort( (a,b) => {
+        return a>b? 1 : (a<b)?-1:0
+      })
+
+    }
+
+    //showtimes.forEach( m => console.log("->", m.toISOString() ))
+
+    //console.log('showtimes',showtimes );
 
     return <div>
       <h2 className="">
@@ -70,6 +100,10 @@ export default class Show extends React.Component {
                 <Image imageId={show.portrait_image} className="thumbnail"/>
 
                 <h3 className="page-header">Termine</h3>
+
+              {showtimes.map( s => (
+                <p>{moment(s).format('dddd DD.MM.YYYY HH:mm')}</p>
+              ))}
 
           </div>
       </div>
