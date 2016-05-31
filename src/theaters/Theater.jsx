@@ -11,6 +11,7 @@ import {loadTheater, saveTheater, removeShow} from './actions2'
 import TheaterForm from './TheaterForm'
 
 import Shows from './Shows'
+import Campaigns from './Campaigns'
 
 
 
@@ -56,13 +57,21 @@ class TheaterComponent extends React.Component {
               <button className="btn btn-default pull-right">Add Show</button>
             </LinkContainer>
 
+            <LinkContainer to={`/theaters/v/${theater._id.$oid}/campaigns/n`}>
+              <button className="btn btn-default pull-right">Add Campaign</button>
+            </LinkContainer>
+
           </h2>
 
           <br/>
             <Tabs>
+              <Tab title="Campaigns">
+                <Campaigns/>
+              </Tab>
               <Tab title="Shows">
                 <Shows/>
               </Tab>
+
                 <Tab title="Info"><br/>
                   <TheaterForm theater={theater} onSubmit={this.handleSubmit.bind(this)}/>
                 </Tab>

@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 
 import { theaterReducer } from './theaters/reducers'
 
-import { theaters, theater, shows } from './theaters/reducers2'
+import { theaters, theater, shows, campaigns } from './theaters/reducers2'
 
 
 import { routerMiddleware } from 'react-router-redux'
@@ -70,7 +70,7 @@ const promise = store => next => action =>
     : next(action);
 
 
-const reducers = combineReducers({theaters,theater,shows, theaterReducer})
+const reducers = combineReducers({theaters,theater,shows,campaigns, theaterReducer})
 
 
 // Apply the middleware to the store

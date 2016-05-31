@@ -4,42 +4,31 @@ import { LinkContainer,IndexLinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
 import { Modal ,Button} from 'react-bootstrap';
 
-import moment from 'moment'
-import later from 'later'
 
-import {createFormData} from '../forms'
 import { removeShow} from './actions2'
-import ShowForm from './ShowForm'
 
 import {  Image } from '../forms/image'
 
 
-
 @connect(
-  state=> ({ shows: state.shows, theater:state.theater }),
+  state=> ({ campaigns: state.campaigns, shows: state.shows,  theater:state.theater }),
   {removeShow}
 )
-export default class Shows extends React.Component {
+export default class Campaigns extends React.Component {
 
   state = { confirmDelete : null }
 
   componentDidMount() {
-    //  this.props.loadTheaters()
-
-
-
 
   }
 
   showDeleteConfirm(t) {
-    console.log("revome",t);
     this.setState({confirmDelete:t})
   }
 
   hideConfirmModal() {
     this.setState({confirmDelete:null})
   }
-
 
   removeItem(){
     const item = this.state.confirmDelete
@@ -72,10 +61,11 @@ export default class Shows extends React.Component {
   }
 
   render() {
-    const {shows} = this.props
-
+    const {campaigns} = this.props
+    console.log("Campaigns.render");
     const modal = this.renderConfirmDelete()
 
+    campaigns.map( c => console.log(c))
 
     return <div>
       {modal}
@@ -84,36 +74,13 @@ export default class Shows extends React.Component {
           <tr><th>Name</th></tr>
         </thead>
         <tbody>
-          {shows.map( t=>
+          {campaigns.map( t=>
             <tr key={t._id.$oid}>
               <td>
-
-                <div className="media">
-                  <div className="media-left">
-                    <LinkContainer to={`/theaters/v/${this.props.theater._id.$oid}/shows/v/${t._id.$oid}`}>
-                    <a href="#">
-                        <Image imageId={t.portrait_image} className="media-object"/>
-                    </a>
-                    </LinkContainer>
-                  </div>
-                  <div className="media-body media-middle">
-                    <h4 className="media-heading">
-                      <LinkContainer to={`/theaters/v/${this.props.theater._id.$oid}/shows/v/${t._id.$oid}`}>
-                      <a href="#">
-                        {t.title}
-                      </a>
-                      </LinkContainer>
-                    </h4>
-                    {t.subtitle}<br/>
-
-                  <div style={{marginTop:10}}>
-                    <DateString value={t.start_date}/> - <DateString value={t.end_date}/>
-                  </div>
-
-                  </div>
-                </div>
+                  {t._id.$oid}
 
 
+                  <CampaignItem campaign={t}/>
 
 
 
@@ -134,6 +101,60 @@ export default class Shows extends React.Component {
     </div>;
   }
 }
+
+
+@connect(
+  (state, ownProps)=> {
+    const showId = ownProps.campaign.show.$oid
+    return {
+      theater: state.theater,
+      show: _.first(state.shows.filter( e=> showId === e._id.$oid ))
+    }
+  }
+)
+class CampaignItem extends React.Component {
+
+  render() {
+    var { theater, show, campaign } = this.props
+
+
+
+    return   <div className="media">
+
+
+      <div className="media-left">
+        <LinkContainer to={`/theaters/v/${theater._id.$oid}/campaigns/v/${campaign._id.$oid}`}>
+        <a href="#">
+            <Image imageId={show.portrait_image} className="media-object"/>
+        </a>
+        </LinkContainer>
+      </div>
+
+
+
+
+        <div className="media-body media-middle">
+          <h4 className="media-heading">
+            <LinkContainer to={`/theaters/v/${this.props.theater._id.$oid}/campaigns/v/${campaign._id.$oid}`}>
+            <a href="#">
+              {show.title}
+            </a>
+            </LinkContainer>
+          </h4>
+          {show.subtitle}<br/>
+
+        <div style={{marginTop:10}}>
+          <DateString value={show.start_date}/> - <DateString value={show.end_date}/>
+        </div>
+
+        </div>
+
+      </div>
+
+  }
+
+}
+
 
 
 

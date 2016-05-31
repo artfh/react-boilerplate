@@ -27,6 +27,7 @@ export function loadTheater(theaterId) {
       result.then( (r)=> {
         dispatch(r)
         dispatch(loadShows(theaterId))
+        dispatch(loadCampaigns(theaterId))
       })
       return result
     }
@@ -136,5 +137,14 @@ export function fetchTheater(theaterId) {
       } else {
         dispatch( loadTheater(theaterId) )
       }
+    }
+}
+
+
+export async function loadCampaigns(theaterId): Promise {
+    const campaigns = await client.Campaign.list(theaterId)
+    return {
+      type: 'LOADED_CAMPAIGNS',
+      campaigns,
     }
 }

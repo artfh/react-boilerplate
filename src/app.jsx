@@ -22,7 +22,7 @@ import { UserPage, UserDetails } from './users'
 import { ReposPage, RepoDetails } from './repos'
 import { FormPage } from './form'
 
-import {Theaters, Theater, CreateTheater, CreateShow, EditShow, Show} from './theaters'
+import {Theaters, Theater, CreateTheater, CreateShow, EditShow, Show, CreateCampaign,EditCampaign, Campaign } from './theaters'
 
 import './theaters/actions2'
 
@@ -53,6 +53,12 @@ var routes =
         <Route path="shows/n" component={CreateShow}/>
         <Route path="shows/e/:showId" component={EditShow}/>
         <Route path="shows/v/:showId" component={Show}/>
+        <Route path="campaigns/n" component={CreateCampaign}/>
+        <Route path="campaigns/e/:campaignId" component={EditCampaign}/>
+        <Route path="campaigns/v/:campaignId" component={Campaign}/>
+
+
+
 
       </Route>
       <Route path="n" component={CreateTheater}/>

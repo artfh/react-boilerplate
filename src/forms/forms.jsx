@@ -31,7 +31,7 @@ export const createFormData = (value, files)=> {
 export var createLink = (that,prop, key, type)=> {
   var name = key+'.'+prop
   var v = _.get(that.state, name)
-  console.log("VVVV",v);
+  //console.log("VVVV",v);
   if(v && type === 'date' && v['$date']) {
       v = moment(v['$date']).format('YYYY-MM-DD')
   }
@@ -125,6 +125,43 @@ export class TextInput extends React.Component {
 
 }
 
+
+
+export class Select extends React.Component {
+
+  render() {
+
+    var {name,label,placeholder,id, options, optionKey, optionLabel} = this.props
+    label = label || _.startCase(name);
+    placeholder = placeholder || _.startCase(name);
+    id = id || 'id_'+name;
+
+    options = options.map( o => {
+      var key = optionKey? _.get(o, optionKey) : o
+      var label = optionLabel? _.get(o, optionLabel) :o
+      return { key, label }
+    })
+
+    return (
+      <FormGroup label={label}>
+
+      <select
+        className="form-control"
+        placeholder={placeholder}
+        id={id}
+        {...this.props}
+        >
+        { options.map( o =>
+          <option value={o.key}>{o.label}</option>
+         ) }
+
+      </select>
+      </FormGroup>
+    );
+  }
+
+
+}
 
 
 export class FormGroup extends React.Component {

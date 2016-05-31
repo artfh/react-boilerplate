@@ -45,3 +45,24 @@ export const shows = (state = [], action) => {
       return state
   }
 }
+
+
+export const campaigns = (state = [], action) => {
+  switch(action.type) {
+    case 'LOADED_CAMPAIGNS':
+        return action.campaigns
+
+    case 'REMOVED_CAMPAIGN':
+          return state.filter( e=> e._id.$oid != action.campaign._id.$oid )
+
+    case 'SAVED_CAMPAIGN':
+          return state.map( e=> {
+            if (e._id.$oid != action.campaign._id.$oid) return e
+            return action.campaign
+          })
+
+
+    default:
+      return state
+  }
+}

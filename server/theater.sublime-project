@@ -1,0 +1,12 @@
+{
+	"folders":
+	[
+		{
+			"path": "/home/argrinst/Projects/tmp/react-boilerplate"
+		}
+	],
+
+	"settings": {
+    "python_interpreter": "/home/argrinst/Projects/tmp/react-boilerplate/server/venv/bin/python"
+}
+}
